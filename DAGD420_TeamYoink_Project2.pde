@@ -2,6 +2,7 @@
 SceneTitle sceneTitle;
 ScenePlay scenePlay;
 SceneGameOver sceneGameOver;
+// Hello I like Cheese
 
 // keep any global state (variables that don't belong to a specific scene) here.
 // the keyboard state is global, because every scene can use it:
