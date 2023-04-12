@@ -13,7 +13,7 @@ class SceneTitle {
     fill(255);
     textSize(20);
     textAlign(CENTER, CENTER);
-    text("The Neat Game", width/2, height/2 - 30);
+    text("MONSTER GIRL MADNESS", width/2, height/2 - 30);
     textSize(12);
     text("Press ENTER to play!", width/2, height/2);
   }
