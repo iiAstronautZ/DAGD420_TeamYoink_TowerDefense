@@ -23,7 +23,7 @@ class ScenePlay {
 
     // DRAW:
     background(TileHelper.isHex ? 0 : 127);
-    image(img, 0, 0);
+    image(img, -250, 0);
 
     level.draw();
     player.draw();

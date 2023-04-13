@@ -9,7 +9,7 @@ SceneGameOver sceneGameOver;
 boolean keyEnter = false;
 
 void setup() {
-  size(720, 720);
+  size(900, 900);
   TileHelper.app = this;
   switchToTitle();
 }
