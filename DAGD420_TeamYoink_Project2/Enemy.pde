@@ -13,6 +13,21 @@ class Enemy extends RadialObject
 
   Enemy() 
   {
+    int spawn = (int)random(0, 12);
+    if(spawn == 0) gridP = new Point(1, 0);
+    if(spawn == 1) gridP = new Point(10, 0);
+    if(spawn == 2) gridP = new Point(19, 0);
+    if(spawn == 3) gridP = new Point(19, 4);
+    if(spawn == 4) gridP = new Point(19, 9);
+    if(spawn == 5) gridP = new Point(19, 19);
+    if(spawn == 6) gridP = new Point(19, 19);
+    if(spawn == 7) gridP = new Point(15, 19);
+    if(spawn == 8) gridP = new Point(11, 19);
+    if(spawn == 9) gridP = new Point(7, 19);
+    if(spawn == 10) gridP = new Point(3, 19);
+    if(spawn == 11) gridP = new Point(19, 0);
+    if(spawn == 12) gridP = new Point(6, 0);
+    
     teleportTo(gridP);
   }
   
