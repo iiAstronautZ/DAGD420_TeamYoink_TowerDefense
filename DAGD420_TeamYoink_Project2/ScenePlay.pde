@@ -45,6 +45,7 @@ class ScenePlay
       Enemy e = new Enemy();
       enemies.add(e);
       enemyTimer = 5;
+      moveToTarget();
       println(enemies.size());
     }
     
@@ -103,12 +104,21 @@ class ScenePlay
     player.setTargetPosition(TileHelper.pixelToGrid(new PVector(mouseX, mouseY)));
     //enemy.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
     
-    
+    /*
      for(int i = 0; i < enemies.size(); i++)
     {
       Enemy e = enemies.get(i);
      e.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
     }
-    
+    */
+  }
+  
+  void moveToTarget()
+  {
+    for(int i = 0; i < enemies.size(); i++)
+    {
+      Enemy e = enemies.get(i);
+     e.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
+    }
   }
 }
