@@ -1,6 +1,6 @@
 class Enemy extends RadialObject
 {
-   // GRID-SPACE COORDINATES:
+  // GRID-SPACE COORDINATES:
   Point gridP = new Point(); // current position
   Point gridT = new Point(); // target position (pathfinding goal)
   Point testStart = new Point(200, 200);
