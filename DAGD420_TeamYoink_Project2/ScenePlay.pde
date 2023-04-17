@@ -7,16 +7,18 @@ Pathfinder pathfinder;
 Enemy enemy;
 PImage img;
 
+float enemyTimer = 5;
+
 class ScenePlay 
 {
-  ArrayList<Player> enemies = new ArrayList();
+  ArrayList<Enemy> enemies = new ArrayList();
   //ArrayList<Enemy> enemies = new ArrayList();
   
   ScenePlay() 
   {
     level = new Level();
     player = new Player();
-    enemy = new Enemy();
+    //enemy = new Enemy();
     pathfinder = new Pathfinder();
     img = loadImage("background.png");
     
@@ -37,15 +39,24 @@ class ScenePlay
   {
     // UPDATE:
     
+    enemyTimer -= dt;
+    if (enemyTimer <= 0)
+    {
+      Enemy e = new Enemy();
+      enemies.add(e);
+      enemyTimer = 5;
+      println(enemies.size());
+    }
+    
     player.update();
-    enemy.update();
-    /*
+    //enemy.update();
+    
     for(int i = 0; i < enemies.size(); i++)
     {
-      Player p = enemies.get(i);
-      p.update();
+      Enemy e = enemies.get(i);
+      e.update();
     }
-    */
+    
 
     // DRAW:
     background(TileHelper.isHex ? 0 : 127);
@@ -53,14 +64,15 @@ class ScenePlay
 
     level.draw();
     player.draw();
-    enemy.draw();
-    /*
-     for(int i = 0; i < enemies.size(); i++)
+    //enemy.draw();
+    
+    // ADDING ENEMIES TO ARRAY?
+    
+   for(int i = 0; i < enemies.size(); i++)
     {
-      Player p = enemies.get(i);
-      p.draw();
+      Enemy e = enemies.get(i);
+      e.draw();
     }
-    */
 
     // TODO: using mouse position, get tile. set it's hover property to true
     Point g = TileHelper.pixelToGrid(new PVector(mouseX, mouseY));
@@ -89,14 +101,14 @@ class ScenePlay
   void mousePressed() 
   {
     player.setTargetPosition(TileHelper.pixelToGrid(new PVector(mouseX, mouseY)));
-    enemy.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
+    //enemy.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
     
-    /*
+    
      for(int i = 0; i < enemies.size(); i++)
     {
-      Player p = enemies.get(i);
-     p.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
+      Enemy e = enemies.get(i);
+     e.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
     }
-    */
+    
   }
 }

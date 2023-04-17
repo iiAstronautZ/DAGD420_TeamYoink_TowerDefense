@@ -7,12 +7,16 @@ SceneGameOver sceneGameOver;
 // the keyboard state is global, because every scene can use it:
 boolean keyEnter = false;
 
+float dt;
+float prevTime;
+
 void setup() {
   size(720, 720);
   TileHelper.app = this;
   switchToTitle();
 }
 void draw() {
+  calcDeltaTime();
 
   // update and draw any active scenes:
 
@@ -75,4 +79,11 @@ void keyPressed() {
 
 void keyReleased() {
   if (keyCode == 10) keyEnter = false;
+}
+
+void calcDeltaTime()
+{
+  float currTime = millis()/1000.0;
+  dt = currTime - prevTime;
+  prevTime = currTime;
 }
