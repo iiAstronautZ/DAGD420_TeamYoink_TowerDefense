@@ -11,7 +11,7 @@ class ScenePlay {
     level = new Level();
     player = new Player();
     pathfinder = new Pathfinder();
-    img = loadImage("background.png");
+    img = loadImage("ArmyBase_TD.png");
   }
 
   void update() {
@@ -23,7 +23,7 @@ class ScenePlay {
 
     // DRAW:
     background(TileHelper.isHex ? 0 : 127);
-    image(img, -250, 0);
+    image(img, 0, 0);
 
     level.draw();
     player.draw();
