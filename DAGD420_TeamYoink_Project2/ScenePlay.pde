@@ -4,24 +4,29 @@ boolean debug = false;
 Level level;
 Player player;
 Pathfinder pathfinder;
+Enemy enemy;
 PImage img;
 
 class ScenePlay 
 {
   ArrayList<Player> enemies = new ArrayList();
+  //ArrayList<Enemy> enemies = new ArrayList();
   
   ScenePlay() 
   {
     level = new Level();
-    //player = new Player();
+    player = new Player();
+    enemy = new Enemy();
     pathfinder = new Pathfinder();
     img = loadImage("background.png");
     
+    /*
     for(int i = 0; i < 3; i++)
     {
       Player p = new Player();
       enemies.add(p);
     }
+    */
   }
 
   void update() 
@@ -32,24 +37,30 @@ class ScenePlay
   {
     // UPDATE:
     
-    //player.update();
+    player.update();
+    enemy.update();
+    /*
     for(int i = 0; i < enemies.size(); i++)
     {
       Player p = enemies.get(i);
       p.update();
     }
+    */
 
     // DRAW:
     background(TileHelper.isHex ? 0 : 127);
     //image(img, 0, 0);
 
     level.draw();
-    //player.draw();
+    player.draw();
+    enemy.draw();
+    /*
      for(int i = 0; i < enemies.size(); i++)
     {
       Player p = enemies.get(i);
       p.draw();
     }
+    */
 
     // TODO: using mouse position, get tile. set it's hover property to true
     Point g = TileHelper.pixelToGrid(new PVector(mouseX, mouseY));
@@ -72,17 +83,20 @@ class ScenePlay
     //text(s3, 10, 45);
     //text(s4, 10, 60);
     
-    println(enemies.size());
+    //println(enemies.size());
   }
 
   void mousePressed() 
   {
-    //player.setTargetPosition(TileHelper.pixelToGrid(new PVector(mouseX, mouseY)));
+    player.setTargetPosition(TileHelper.pixelToGrid(new PVector(mouseX, mouseY)));
+    enemy.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
     
+    /*
      for(int i = 0; i < enemies.size(); i++)
     {
       Player p = enemies.get(i);
-      p.setTargetPosition(TileHelper.pixelToGrid(new PVector(mouseX, mouseY)));
+     p.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
     }
+    */
   }
 }
