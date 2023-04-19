@@ -75,14 +75,15 @@ class ScenePlay {
           turrets.add(t);
           t.x = pos.x;
           t.y = pos.y;
+          
         } else println("A turret is already on this tile!!!");
         tile.hasTurret = true;
       }
     } else if (mouseButton == RIGHT) {
       if (tile.hasTurret) {
-
-        //turrets.remove(t);
-
+        
+        turrets.remove(t);
+        
         tile.hasTurret = false;
       }
     }

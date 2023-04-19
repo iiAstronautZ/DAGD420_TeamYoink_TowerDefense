@@ -2,6 +2,13 @@ class Turret {
   
   float x, y;
   
+  boolean isDeleted;
+  
+  // Upgrades variables
+  float fireRate;
+  float damage;
+  float range;
+  
   Turret() {
   }
   
@@ -11,6 +18,6 @@ class Turret {
 
   void draw() {
     fill(0, 255, 0);
-    ellipse(x, y, 25, 25);
+    ellipse(x, y, 30, 30);
   }
 }
