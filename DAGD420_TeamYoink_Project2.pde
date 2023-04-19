@@ -7,6 +7,8 @@ SceneGameOver sceneGameOver;
 // the keyboard state is global, because every scene can use it:
 boolean keyEnter = false;
 
+boolean canPlaceTurret;
+
 void setup() {
   size(720, 720);
   TileHelper.app = this;

@@ -1,5 +1,7 @@
 // this class defines a "Play" scene
 
+ArrayList<Turret> turrets = new ArrayList<Turret>();
+
 boolean debug = false;
 Level level;
 Player player;
@@ -28,14 +30,21 @@ class ScenePlay {
     level.draw();
     player.draw();
 
+    for (int i = 0; i < turrets.size(); i++) {
+      Turret t = turrets.get(i);
+      t.draw();
+    }
+
     // TODO: using mouse position, get tile. set it's hover property to true
     Point g = TileHelper.pixelToGrid(new PVector(mouseX, mouseY));
     Tile tile = level.getTile(g);
     tile.hover = true;
+
+
     // TODO: draw a little ellipse in the tile's center
     PVector m = tile.getCenter();
     fill(0);
-    ellipse(m.x, m.y, 8, 8);
+    //ellipse(m.x, m.y, 8, 8);
 
 
     // DRAW DEBUG INFO:
@@ -51,6 +60,21 @@ class ScenePlay {
   }
 
   void mousePressed() {
-    player.setTargetPosition(TileHelper.pixelToGrid(new PVector(mouseX, mouseY)));
+    //player.setTargetPosition(TileHelper.pixelToGrid(new PVector(mouseX, mouseY)));
+    if (canPlaceTurret) {
+      Point point = TileHelper.pixelToGrid(new PVector(mouseX, mouseY));
+      Tile tile = level.getTile(point);
+
+      PVector pos = tile.getCenter();
+
+      if (!tile.hasTurret) {
+        Turret t = new Turret();
+        turrets.add(t);
+        t.x = pos.x;
+        t.y = pos.y;
+      } else println("A turret is already on this tile!!!");
+
+      tile.hasTurret = true;
+    }
   }
 }
