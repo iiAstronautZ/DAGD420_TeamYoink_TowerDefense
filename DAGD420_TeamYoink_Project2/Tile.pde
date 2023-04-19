@@ -44,8 +44,11 @@ class Tile {
       else if (hover) {
       } //else return; // don't draw empty tiles
     }
-    if (TERRAIN == 1) fill(200);
-    if (TERRAIN == 2) fill(0, 155, 0);
+    if (TERRAIN == 1) fill(100, 75);
+    if (TERRAIN == 2) fill(155, 75);
+    if (TERRAIN == 3) fill(200, 75);
+    if (TERRAIN == 4) fill(255, 75);
+    if (TERRAIN == 5) fill(255, 0, 0);
     if (hover) fill(255, 255, 0);
 
     if (TileHelper.isHex) { // Hex

@@ -9,7 +9,8 @@ class Pathfinder {
   Pathfinder() {
   }
 
-  ArrayList<Tile> findPath(Tile start, Tile end) {
+  ArrayList<Tile> findPath(Tile start, Tile end) 
+  {
 
     // TODO: make the pathfinding algorithm ;)
     open.clear(); // empty array
