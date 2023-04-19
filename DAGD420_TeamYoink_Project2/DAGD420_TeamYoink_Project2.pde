@@ -2,18 +2,22 @@
 SceneTitle sceneTitle;
 ScenePlay scenePlay;
 SceneGameOver sceneGameOver;
-// Hello I like Cheese
 
 // keep any global state (variables that don't belong to a specific scene) here.
 // the keyboard state is global, because every scene can use it:
 boolean keyEnter = false;
+boolean canPlaceTurret = false;
+
+float dt;
+float prevTime;
 
 void setup() {
-  size(900, 900);
+  size(1260, 900);
   TileHelper.app = this;
   switchToTitle();
 }
 void draw() {
+  calcDeltaTime();
 
   // update and draw any active scenes:
 
@@ -76,4 +80,11 @@ void keyPressed() {
 
 void keyReleased() {
   if (keyCode == 10) keyEnter = false;
+}
+
+void calcDeltaTime()
+{
+  float currTime = millis()/1000.0;
+  dt = currTime - prevTime;
+  prevTime = currTime;
 }

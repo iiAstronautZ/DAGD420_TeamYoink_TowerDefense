@@ -31,6 +31,7 @@ class Tile {
   int Y; // GRID Y
   int TERRAIN = 0; // TERRAIN TYPE
   boolean hover = false;
+  boolean hasTurret = false;
 
   Tile(int X, int Y) {
     this.X = X;
@@ -50,15 +51,24 @@ class Tile {
     if (TERRAIN == 5) fill(255, 0, 0);
     if (hover) fill(255, 255, 0);
 
-    if (TileHelper.isHex) {
+    if (TileHelper.isHex) { // Hex
       PVector p = getCenter();
       ellipse(p.x, p.y, TileHelper.W, TileHelper.H);
-    } else {
+    } else { // Box Grid
       PVector p = TileHelper.gridToPixel(X, Y);
       stroke(25);
       if (TERRAIN == 0) fill(155, 55);
       rect(p.x, p.y, TileHelper.W, TileHelper.H);
-    }
+
+      if (hover) {
+        if (TERRAIN == 2) {
+          fill(255, 0, 0);
+          //println("You can place a turret here!!!");
+          canPlaceTurret = true;
+        } 
+        else canPlaceTurret = false;
+      }
+    } 
     hover = false;
   }
   // GET THE CENTER POINT OF THIS TILE IN PIXEL-SPACE:
