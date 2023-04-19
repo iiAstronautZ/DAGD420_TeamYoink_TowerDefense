@@ -11,8 +11,6 @@ boolean canPlaceTurret = false;
 float dt;
 float prevTime;
 
-boolean canPlaceTurret;
-
 void setup() {
   size(1260, 900);
   TileHelper.app = this;
