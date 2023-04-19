@@ -22,7 +22,7 @@ class ScenePlay
     player = new Player();
     //enemy = new Enemy();
     pathfinder = new Pathfinder();
-    img = loadImage("background.png");
+    img = loadImage("ArmyBase_TD.png");
 
     /*
     for(int i = 0; i < 3; i++)
@@ -63,7 +63,7 @@ class ScenePlay
 
     // DRAW:
     background(TileHelper.isHex ? 0 : 127);
-    //image(img, 0, 0);
+    image(img, 0, 0);
 
     level.draw();
     player.draw();

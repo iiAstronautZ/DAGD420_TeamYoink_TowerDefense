@@ -12,7 +12,7 @@ float dt;
 float prevTime;
 
 void setup() {
-  size(720, 720);
+  size(1260, 900);
   TileHelper.app = this;
   switchToTitle();
 }
