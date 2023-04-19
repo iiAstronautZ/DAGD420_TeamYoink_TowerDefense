@@ -6,6 +6,7 @@ SceneGameOver sceneGameOver;
 // keep any global state (variables that don't belong to a specific scene) here.
 // the keyboard state is global, because every scene can use it:
 boolean keyEnter = false;
+boolean canPlaceTurret = false;
 
 float dt;
 float prevTime;

@@ -1,5 +1,8 @@
 // this class defines a "Play" scene
 
+ArrayList<Turret> turrets = new ArrayList<Turret>();
+ArrayList<Enemy> enemies = new ArrayList();
+
 boolean debug = false;
 Level level;
 Player player;
@@ -11,9 +14,8 @@ float enemyTimer = 5;
 
 class ScenePlay 
 {
-  ArrayList<Enemy> enemies = new ArrayList();
   //ArrayList<Enemy> enemies = new ArrayList();
-  
+
   ScenePlay() 
   {
     level = new Level();
@@ -21,14 +23,14 @@ class ScenePlay
     //enemy = new Enemy();
     pathfinder = new Pathfinder();
     img = loadImage("background.png");
-    
+
     /*
     for(int i = 0; i < 3; i++)
-    {
-      Player p = new Player();
-      enemies.add(p);
-    }
-    */
+     {
+     Player p = new Player();
+     enemies.add(p);
+     }
+     */
   }
 
   void update() 
@@ -38,7 +40,7 @@ class ScenePlay
   void draw() 
   {
     // UPDATE:
-    
+
     enemyTimer -= dt;
     if (enemyTimer <= 0)
     {
@@ -48,16 +50,16 @@ class ScenePlay
       moveToTarget();
       println(enemies.size());
     }
-    
+
     player.update();
     //enemy.update();
-    
-    for(int i = 0; i < enemies.size(); i++)
+
+    for (int i = 0; i < enemies.size(); i++)
     {
       Enemy e = enemies.get(i);
       e.update();
     }
-    
+
 
     // DRAW:
     background(TileHelper.isHex ? 0 : 127);
@@ -65,11 +67,17 @@ class ScenePlay
 
     level.draw();
     player.draw();
+
+    for (int i = 0; i < turrets.size(); i++) {
+      Turret t = turrets.get(i);
+      t.draw();
+    }   
+
     //enemy.draw();
-    
+
     // ADDING ENEMIES TO ARRAY?
-    
-   for(int i = 0; i < enemies.size(); i++)
+
+    for (int i = 0; i < enemies.size(); i++)
     {
       Enemy e = enemies.get(i);
       e.draw();
@@ -95,30 +103,58 @@ class ScenePlay
     //text(s2, 10, 30);
     //text(s3, 10, 45);
     //text(s4, 10, 60);
-    
+
     //println(enemies.size());
   }
 
   void mousePressed() 
   {
-    player.setTargetPosition(TileHelper.pixelToGrid(new PVector(mouseX, mouseY)));
+    //player.setTargetPosition(TileHelper.pixelToGrid(new PVector(mouseX, mouseY)));
     //enemy.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
-    
+
     /*
      for(int i = 0; i < enemies.size(); i++)
-    {
-      Enemy e = enemies.get(i);
+     {
+     Enemy e = enemies.get(i);
      e.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
+     }
+     */
+
+    Point point = TileHelper.pixelToGrid(new PVector(mouseX, mouseY));
+    Tile tile = level.getTile(point);
+
+    PVector pos = tile.getCenter();
+
+    Turret t = new Turret();
+
+    if (mouseButton == LEFT) {
+      if (canPlaceTurret) {
+
+        if (!tile.hasTurret) {
+          turrets.add(t);
+          t.x = pos.x;
+          t.y = pos.y;
+        } else println("A turret is already on this tile!!!");
+        tile.hasTurret = true;
+      }
+    } else if (mouseButton == RIGHT) {
+      if (tile.hasTurret) {
+
+        //for (int i = 0; i < turrets.size(); i++) {
+        //  turrets.remove(i);
+        //}
+
+        tile.hasTurret = false;
+      }
     }
-    */
   }
-  
-  void moveToTarget()
+}
+
+void moveToTarget()
+{
+  for (int i = 0; i < enemies.size(); i++)
   {
-    for(int i = 0; i < enemies.size(); i++)
-    {
-      Enemy e = enemies.get(i);
-     e.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
-    }
+    Enemy e = enemies.get(i);
+    e.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
   }
 }
