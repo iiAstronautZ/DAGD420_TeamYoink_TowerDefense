@@ -61,20 +61,30 @@ class ScenePlay {
 
   void mousePressed() {
     //player.setTargetPosition(TileHelper.pixelToGrid(new PVector(mouseX, mouseY)));
-    if (canPlaceTurret) {
-      Point point = TileHelper.pixelToGrid(new PVector(mouseX, mouseY));
-      Tile tile = level.getTile(point);
+    Point point = TileHelper.pixelToGrid(new PVector(mouseX, mouseY));
+    Tile tile = level.getTile(point);
 
-      PVector pos = tile.getCenter();
+    PVector pos = tile.getCenter();
 
-      if (!tile.hasTurret) {
-        Turret t = new Turret();
-        turrets.add(t);
-        t.x = pos.x;
-        t.y = pos.y;
-      } else println("A turret is already on this tile!!!");
+    Turret t = new Turret();
 
-      tile.hasTurret = true;
+    if (mouseButton == LEFT) {
+      if (canPlaceTurret) {
+
+        if (!tile.hasTurret) {
+          turrets.add(t);
+          t.x = pos.x;
+          t.y = pos.y;
+        } else println("A turret is already on this tile!!!");
+        tile.hasTurret = true;
+      }
+    } else if (mouseButton == RIGHT) {
+      if (tile.hasTurret) {
+
+        //turrets.remove(t);
+
+        tile.hasTurret = false;
+      }
     }
   }
 }
