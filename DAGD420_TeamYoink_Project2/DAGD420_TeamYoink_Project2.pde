@@ -88,3 +88,21 @@ void calcDeltaTime()
   dt = currTime - prevTime;
   prevTime = currTime;
 }
+
+boolean isMouseOver(int x, int y, int w, int h) { // Button - put in Main class to be accessible from ANY CLASS 
+  if (mouseX >= x && mouseX <= ( x + w ) && mouseY >= y && mouseY <= ( y + h) ) { //When mouse over button:
+    pushMatrix(); //just so it doesnt change the colors of stuff outside of the push Matrix (dont need push & popMatrices)
+    noStroke();
+    fill(255);
+    rect(x, y, w, h);
+    popMatrix();
+    return true;
+  } else { //When mouse is NOT over button 
+    pushMatrix();
+    noStroke();
+    fill(70);
+    rect(x, y, w, h);
+    popMatrix();
+    return false;
+  }
+}

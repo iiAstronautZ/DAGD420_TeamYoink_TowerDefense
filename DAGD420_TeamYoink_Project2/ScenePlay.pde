@@ -12,6 +12,8 @@ PImage img;
 
 float enemyTimer = 5;
 
+int money = 0;
+
 class ScenePlay 
 {
   //ArrayList<Enemy> enemies = new ArrayList();
@@ -105,6 +107,14 @@ class ScenePlay
     //text(s4, 10, 60);
 
     //println(enemies.size());
+    
+    money += 1;
+    textSize(24);
+    text("$  " + money, 950, 20);
+    
+    isMouseOver(width/2 +350, height/2 + 150, 200, 50);//powerup 1
+    isMouseOver(width/2 +350, height/2 + 250, 200, 50);//powerup 2
+    isMouseOver(width/2 +350, height/2 + 350, 200, 50);//powerup 3
   }
 
   void mousePressed() 
@@ -146,6 +156,15 @@ class ScenePlay
 
         tile.hasTurret = false;
       }
+    }
+    if ((isMouseOver(width/2 +350, height/2 + 150, 200, 50)) & money >= 50) { //powerup 1
+      money -= 50;
+    }
+    if ((isMouseOver(width/2 +350, height/2 + 250, 200, 50)) & money >= 70) { //powerup 2
+      money -= 70;
+    }
+    if ((isMouseOver(width/2 +350, height/2 + 350, 200, 50)) & money >= 100) { //powerup 3
+      money -= 100;
     }
   }
 }
