@@ -3,6 +3,7 @@
 ArrayList<Turret> turrets = new ArrayList<Turret>();
 ArrayList<Enemy> enemies = new ArrayList();
 ArrayList<Bullet> bullets = new ArrayList<Bullet>(); 
+ArrayList<BloodParticle> blood = new ArrayList();
 
 Button damageButton = new Button(1025, 575, "Damage Upgrade", 24, 55, 110, 25);
 
@@ -242,6 +243,9 @@ class ScenePlay
 
           bullets.remove(j);
 
+          BloodParticle s = new BloodParticle(enemies.get(i).PixlTx, enemies.get(i).PixlTy); // Spawns at enemy's position
+          blood.add(s);
+
           if (e.health <= 0) { 
             enemies.remove(e);
             enemiesKilled += 1;
@@ -252,8 +256,15 @@ class ScenePlay
           }
         }
       }
-
       e.draw();
+    }
+
+    for (int i = 0; i < blood.size(); i++) {
+      BloodParticle b = blood.get(i);
+      
+      b.update();
+      
+      b.draw();
     }
 
     // TODO: using mouse position, get tile. set it's hover property to true
