@@ -246,6 +246,8 @@ class ScenePlay
             enemiesKilled += 1;
             println("ENEMIES DED");
             funds += 25;
+            audioAlienDeath.play();
+            audioAlienDeath.rewind();
           }
         }
       }

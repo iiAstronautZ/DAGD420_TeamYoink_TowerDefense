@@ -40,6 +40,9 @@ class Enemy extends RadialObject
 
     alien = loadImage("alien.png");
     alien.resize(65, 65);
+    
+    audioAlienSpawn.play();
+    audioAlienSpawn.rewind();
 
     this.health = health;
 

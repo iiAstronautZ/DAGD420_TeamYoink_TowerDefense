@@ -6,7 +6,12 @@ SceneGameOver sceneGameOver;
 // keep any global state (variables that don't belong to a specific scene) here.
 // the keyboard state is global, because every scene can use it:
 
-import processing.sound.*;
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
 
 boolean keyEnter = false;
 boolean canPlaceTurret = false;
@@ -20,14 +25,22 @@ float cost = 0;
 
 int baseHealth = 5;
 
-SoundFile audio;
+Minim minim;
+AudioPlayer audioBG;
+AudioPlayer audioBullet;
+AudioPlayer audioAlienSpawn;
+AudioPlayer audioAlienDeath;
+
 
 void setup() {
   size(1260, 900);
   
-  audio = new SoundFile(this, "ArmyMen_BGMusic.wav");
-  audio.amp(0.2);
-  audio.loop();
+  minim = new Minim(this);
+  audioBG = minim.loadFile("ArmyMen_BGMusic.mp3");
+  audioBullet = minim.loadFile("Bullet.mp3");
+  audioAlienSpawn = minim.loadFile("AlienSpawn.mp3");
+  audioAlienDeath = minim.loadFile("AlienDeath.mp3");
+  audioBG.loop();
   
   TileHelper.app = this;
   switchToTitle();
