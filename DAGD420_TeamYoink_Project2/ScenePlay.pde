@@ -47,16 +47,16 @@ class ScenePlay
     rangeIcon.resize(65, 65);
     fireRateIcon = loadImage("fireRate.png");
     fireRateIcon.resize(65, 65);
-    
+
     logo = loadImage("logo.png");
     logo.resize(250, 250);
 
     rangeUpgradeCost = 50;
     damageUpgradeCost = 150; 
     fireRateUpgradeCost = 250;
-    
+
     wave = 1;
-    
+
     enemiesKilled = 0;
 
     baseHealth = 5;
@@ -347,11 +347,12 @@ class ScenePlay
     if (mouseButton == LEFT) { 
       if (canPlaceTurret) {
         if (!tile.hasTurret) {
-          if (funds >= 250) {
-            funds -= 250;
+          if (funds >= 150) {
+            funds -= 150;
             turrets.add(t);
             t.x = pos.x;
             t.y = pos.y;
+            tile.hasTurret = true;
           } else println("NOT ENOUGH MONEY");
         } else { 
           //println("A turret is already on this tile!!!");
@@ -368,7 +369,6 @@ class ScenePlay
             }
           }
         }
-        tile.hasTurret = true;
       } else if (fireRateButton.rectOver) {
         for (int i = 0; i < turrets.size(); i++) {
           if (turrets.get(i).isSelected && !turrets.get(i).hasFireRateUpgrade) { 
