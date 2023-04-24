@@ -1,14 +1,20 @@
 // this class defines a "Play" scene
 
 ArrayList<Turret> turrets = new ArrayList<Turret>();
+ArrayList<TurretAOE> turretAOE = new ArrayList<TurretAOE>();
+ArrayList<TurretSlow> turretSlow = new ArrayList<TurretSlow>();
 ArrayList<Enemy> enemies = new ArrayList();
 ArrayList<Bullet> bullets = new ArrayList<Bullet>(); 
 
+//Upgrade buttons
 Button damageButton = new Button(1025, 575, "Damage Upgrade", 24, 55, 110, 25);
-
 Button rangeButton = new Button(1025, 675, "Range Upgrade", 24, 55, 110, 25);
-
 Button fireRateButton = new Button(1025, 775, "Fire Rate Upgrade", 24, 55, 110, 25);
+
+//Turret Buttons
+Button turret1Button = new Button(1025, 575, "Turret 1", 24, 55, 110, 25);
+Button turret2Button = new Button(1025, 675, "Turret 2", 24, 55, 110, 25);
+Button turret3Button = new Button(1025, 775, "Turret 3", 24, 55, 110, 25);
 
 boolean debug = false;
 boolean doOnce = false;
@@ -30,6 +36,13 @@ float rangeUpgradeCost, damageUpgradeCost, fireRateUpgradeCost;
 int wave = 1;
 
 int enemiesKilled = 0;
+
+//Khelben
+Boolean towerSelected = false;
+int turretNumber;
+int tower1Cost = 100;
+int tower2Cost = 200;
+int tower3Cost = 150;
 
 class ScenePlay 
 {
@@ -219,6 +232,15 @@ class ScenePlay
       t.draw();
     }   
 
+    for (int i = 0; i < turretAOE.size(); i++) {
+      TurretAOE a = turretAOE.get(i);
+      a.draw();
+    } 
+    for (int i = 0; i < turretSlow.size(); i++) {
+      TurretSlow s = turretSlow.get(i);
+      s.draw();
+    } 
+
     //enemy.draw();
 
     // ADDING ENEMIES TO ARRAY?
@@ -290,15 +312,28 @@ class ScenePlay
 
     text("Cost: $" + cost + "0", 1075, 525);
 
-
-    image(logo, 950, 50);
+     image(logo, 950, 50);
+    //Khelben
+    if(towerSelected){
+      image(damageIcon, 925, 565);
+      damageButton.draw();
+      image(rangeIcon, 925, 665);
+      rangeButton.draw();
+      image(fireRateIcon, 925, 765);
+      fireRateButton.draw();
+    } else{
+    }
+    //Khelben
+    if(!towerSelected){
+    fill(#7F7F7F);
+    rect(900, 550, 400, 300);
     image(damageIcon, 925, 565);
+    turret1Button.draw();
     image(rangeIcon, 925, 665);
+    turret2Button.draw();
     image(fireRateIcon, 925, 765);
-
-    damageButton.draw();
-    rangeButton.draw();
-    fireRateButton.draw();
+    turret3Button.draw();
+    }
 
     if (damageButton.rectOver && !doOnce) {
       for (int i = 0; i < turrets.size(); i++) {
@@ -346,28 +381,57 @@ class ScenePlay
     PVector pos = tile.getCenter();
 
     Turret t = new Turret();
+    TurretAOE a = new TurretAOE();
+    TurretSlow s = new TurretSlow();
 
     if (mouseButton == LEFT) { 
+        towerSelected = false;
       if (canPlaceTurret) {
-        if (!tile.hasTurret) {
-          if (funds >= 150) {
-            funds -= 150;
+        if (!tile.hasTurret && turretNumber == 1) {
+          if (funds >= tower1Cost) {
+            funds -= tower1Cost;
             turrets.add(t);
             t.x = pos.x;
             t.y = pos.y;
             tile.hasTurret = true;
+            turretNumber = 0;
+          } else println("NOT ENOUGH MONEY");
+        } else if (!tile.hasTurret && turretNumber == 2) {
+          if (funds >= tower2Cost) {
+            funds -= tower2Cost;
+            turretAOE.add(a);
+            t.x = pos.x;
+            t.y = pos.y;
+            tile.hasTurret = true;
+            turretNumber = 0;
+          } else println("NOT ENOUGH MONEY");
+        }  else if (!tile.hasTurret && turretNumber == 3) {
+          if (funds >= tower3Cost) {
+            funds -= tower3Cost;
+            turretSlow.add(s);
+            t.x = pos.x;
+            t.y = pos.y;
+            tile.hasTurret = true;
+            turretNumber = 0;
           } else println("NOT ENOUGH MONEY");
         } else { 
           //println("A turret is already on this tile!!!");
           for (int i = 0; i < turrets.size(); i++) {
+            //Khelben
+            turrets.get(i).isSelected = false;
+            //towerSelected = false;
             if (!turrets.get(i).isSelected) {
               if (turrets.get(i).isHover) { 
                 turrets.get(i).isSelected = true;
+                //Khelben
+                towerSelected = true;
                 println("A turret is selected");
               }
             } else {
               if (turrets.get(i).isHover) {
                 turrets.get(i).isSelected = false;
+                //Khelben
+                towerSelected = false;
               }
             }
           }
@@ -408,7 +472,13 @@ class ScenePlay
             }
           }
         }
-      } 
+      } else if (turret1Button.rectOver) {
+        turretNumber = 1;
+      } else if (turret2Button.rectOver) {
+        turretNumber = 2;
+      } else if (turret3Button.rectOver) {
+        turretNumber = 3;
+      }
       // When nothing is selected
       else {
         for (int i = 0; i < turrets.size(); i++) {
