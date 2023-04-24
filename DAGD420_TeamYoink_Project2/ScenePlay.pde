@@ -225,7 +225,8 @@ class ScenePlay
     for (int i = 0; i < bullets.size(); i++) {
       Bullet b = bullets.get(i);
       if (b.isDead) bullets.remove(b);
-
+      audioBullet.play();
+      audioBullet.rewind();
       b.draw();
     }
 
