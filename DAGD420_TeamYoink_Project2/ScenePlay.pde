@@ -51,9 +51,11 @@ class ScenePlay
     logo = loadImage("logo.png");
     logo.resize(250, 250);
 
-    rangeUpgradeCost = 100;
-    damageUpgradeCost = 250; 
-    fireRateUpgradeCost = 500;
+    rangeUpgradeCost = 50;
+    damageUpgradeCost = 150; 
+    fireRateUpgradeCost = 250;
+    
+    wave = 1;
     
     enemiesKilled = 0;
 
@@ -189,7 +191,7 @@ class ScenePlay
       {
         Enemy e = new Enemy(10);
         enemies.add(e);
-        enemyTimer = 0.025;
+        enemyTimer = 0;
         moveToTarget();
         println(enemies.size());
       }
@@ -345,8 +347,8 @@ class ScenePlay
     if (mouseButton == LEFT) { 
       if (canPlaceTurret) {
         if (!tile.hasTurret) {
-          if (funds >= 100) {
-            funds -= 100;
+          if (funds >= 250) {
+            funds -= 250;
             turrets.add(t);
             t.x = pos.x;
             t.y = pos.y;

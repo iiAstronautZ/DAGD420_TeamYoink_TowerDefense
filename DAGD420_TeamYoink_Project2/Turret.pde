@@ -86,12 +86,9 @@ class Turret {
         float dy = enemies.get(i).pixlP.y - y;
         float dis = sqrt(dx * dx + dy * dy);
 
-        angle = atan2(dy, dx);
-
-        println(dis);
-
         if (dis < 350) {
           b.target = new PVector(e.pixlP.x, e.pixlP.y);
+          angle = atan2(dy, dx);
           bullets.add(b);
         }
       }
