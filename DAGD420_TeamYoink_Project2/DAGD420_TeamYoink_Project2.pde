@@ -11,6 +11,12 @@ boolean canPlaceTurret = false;
 float dt;
 float prevTime;
 
+float funds = 5000;
+
+float cost = 0;
+
+int baseHealth = 5;
+
 void setup() {
   size(1260, 900);
   TileHelper.app = this;
