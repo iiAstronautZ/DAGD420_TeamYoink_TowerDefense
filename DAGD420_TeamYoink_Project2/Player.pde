@@ -60,8 +60,8 @@ class Player {
   }
   void draw() {
     noStroke();
-    fill(0);
-    ellipse(pixlP.x, pixlP.y, 28, 28);
+    //fill(0);
+    //ellipse(pixlP.x, pixlP.y, 28, 28);
     drawPath();
   }
   void drawPath() {

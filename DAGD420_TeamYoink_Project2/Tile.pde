@@ -43,15 +43,15 @@ class Tile {
     noStroke();
     
     if (TERRAIN == 0) {
-      if (TileHelper.isHex) fill(127);
+      if (TileHelper.isHex) fill(255);
       else if (hover) {
       } //else return; // don't draw empty tiles
     }
-    if (TERRAIN == 1) fill(100, 75);
-    if (TERRAIN == 2) fill(155, 75);
-    if (TERRAIN == 3) fill(200, 75);
-    if (TERRAIN == 4) fill(255, 75);
-    if (TERRAIN == 5) fill(255, 0, 0, 0);
+    if (TERRAIN == 1) fill(175, 15);
+    if (TERRAIN == 2) fill(0, 0);
+    if (TERRAIN == 3) fill(0, 0);
+    if (TERRAIN == 4) fill(0, 0);
+    if (TERRAIN == 5) fill(0, 0);
     if (hover) fill(255, 255, 0);
 
     if (TileHelper.isHex) { // Hex
@@ -60,7 +60,7 @@ class Tile {
     } else { // Box Grid
       PVector p = TileHelper.gridToPixel(X, Y);
       //stroke(25);
-      if (TERRAIN == 0) fill(155, 55);
+      if (TERRAIN == 0) fill(0, 0);
       rect(p.x, p.y, TileHelper.W, TileHelper.H);
 
       if (hover) {
