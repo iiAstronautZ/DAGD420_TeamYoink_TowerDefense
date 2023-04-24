@@ -5,6 +5,9 @@ SceneGameOver sceneGameOver;
 
 // keep any global state (variables that don't belong to a specific scene) here.
 // the keyboard state is global, because every scene can use it:
+
+import processing.sound.*;
+
 boolean keyEnter = false;
 boolean canPlaceTurret = false;
 
@@ -17,8 +20,15 @@ float cost = 0;
 
 int baseHealth = 5;
 
+SoundFile audio;
+
 void setup() {
   size(1260, 900);
+  
+  audio = new SoundFile(this, "ArmyMen_BGMusic.wav");
+  audio.amp(0.2);
+  audio.loop();
+  
   TileHelper.app = this;
   switchToTitle();
 }
