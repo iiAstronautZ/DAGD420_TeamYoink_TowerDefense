@@ -46,7 +46,7 @@ class ScenePlay
     {
       Enemy e = new Enemy();
       enemies.add(e);
-      enemyTimer = 5;
+      enemyTimer = 1;
       moveToTarget();
       println(enemies.size());
     }
@@ -90,7 +90,7 @@ class ScenePlay
     // TODO: draw a little ellipse in the tile's center
     PVector m = tile.getCenter();
     fill(0);
-    ellipse(m.x, m.y, 8, 8);
+    //ellipse(m.x, m.y, 8, 8);
 
 
     // DRAW DEBUG INFO:
@@ -155,6 +155,6 @@ void moveToTarget()
   for (int i = 0; i < enemies.size(); i++)
   {
     Enemy e = enemies.get(i);
-    e.setTargetPosition(TileHelper.pixelToGrid(new PVector(300, 300)));
+    e.setTargetPosition(TileHelper.pixelToGrid(new PVector(450, 450)));
   }
 }

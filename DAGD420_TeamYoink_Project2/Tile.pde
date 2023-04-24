@@ -39,6 +39,9 @@ class Tile {
   }
   // DRAW THIS TILE:
   void draw() {
+    
+    noStroke();
+    
     if (TERRAIN == 0) {
       if (TileHelper.isHex) fill(127);
       else if (hover) {
@@ -48,7 +51,7 @@ class Tile {
     if (TERRAIN == 2) fill(155, 75);
     if (TERRAIN == 3) fill(200, 75);
     if (TERRAIN == 4) fill(255, 75);
-    if (TERRAIN == 5) fill(255, 0, 0);
+    if (TERRAIN == 5) fill(255, 0, 0, 0);
     if (hover) fill(255, 255, 0);
 
     if (TileHelper.isHex) { // Hex
@@ -56,7 +59,7 @@ class Tile {
       ellipse(p.x, p.y, TileHelper.W, TileHelper.H);
     } else { // Box Grid
       PVector p = TileHelper.gridToPixel(X, Y);
-      stroke(25);
+      //stroke(25);
       if (TERRAIN == 0) fill(155, 55);
       rect(p.x, p.y, TileHelper.W, TileHelper.H);
 
