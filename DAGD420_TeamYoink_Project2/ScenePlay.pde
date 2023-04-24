@@ -1,8 +1,10 @@
 // this class defines a "Play" scene
 
 ArrayList<Turret> turrets = new ArrayList<Turret>();
+ArrayList<FreezeTurret> freezeTurrets = new ArrayList<FreezeTurret>();
 ArrayList<Enemy> enemies = new ArrayList();
 ArrayList<Bullet> bullets = new ArrayList<Bullet>(); 
+ArrayList<Frost> frost = new ArrayList<Frost>(); 
 
 Button damageButton = new Button(1025, 575, "Damage Upgrade", 24, 55, 110, 25);
 
@@ -218,16 +220,29 @@ class ScenePlay
       Turret t = turrets.get(i);
       t.draw();
     }   
+    for (int i = 0; i < freezeTurrets.size(); i++) {
+      FreezeTurret f = freezeTurrets.get(i);
+      f.draw();
+    }   
 
     //enemy.draw();
 
     // ADDING ENEMIES TO ARRAY?
+    // Normal Bullet
     for (int i = 0; i < bullets.size(); i++) {
       Bullet b = bullets.get(i);
       if (b.isDead) bullets.remove(b);
       audioBullet.play();
       audioBullet.rewind();
       b.draw();
+    }
+    // Frost Bullet
+    for (int i = 0; i < frost.size(); i++) {
+      Frost f = frost.get(i);
+      if (f.isDead) frost.remove(f);
+      audioBullet.play();
+      audioBullet.rewind();
+      f.draw();
     }
 
     for (int i = 0; i < enemies.size(); i++)
@@ -241,6 +256,24 @@ class ScenePlay
           e.health -= bullets.get(j).damage;
 
           bullets.remove(j);
+
+          if (e.health <= 0) { 
+            enemies.remove(e);
+            enemiesKilled += 1;
+            println("ENEMIES DED");
+            funds += 25;
+            audioAlienDeath.play();
+            audioAlienDeath.rewind();
+          }
+        }
+      }
+        for (int f = 0; f < frost.size(); f++) { // Frost collision with Enemy
+        if (checkCollisionFrostEnemy(frost.get(f), e)) {
+
+          //e.health -= frost.get(f).damage;
+          //enemy.gridT = enemy.gridP;
+
+          frost.remove(f);
 
           if (e.health <= 0) { 
             enemies.remove(e);
@@ -299,7 +332,7 @@ class ScenePlay
     damageButton.draw();
     rangeButton.draw();
     fireRateButton.draw();
-
+    
     if (damageButton.rectOver && !doOnce) {
       for (int i = 0; i < turrets.size(); i++) {
         if (turrets.get(i).isSelected && !turrets.get(i).hasDamageUpgrade) {
@@ -346,8 +379,10 @@ class ScenePlay
     PVector pos = tile.getCenter();
 
     Turret t = new Turret();
-
-    if (mouseButton == LEFT) { 
+    FreezeTurret f = new FreezeTurret();
+    
+    //////// Normal Tower ////////
+    if (mouseButton == CENTER) { 
       if (canPlaceTurret) {
         if (!tile.hasTurret) {
           if (funds >= 150) {
@@ -431,6 +466,94 @@ class ScenePlay
         tile.hasTurret = false;
       }
     }
+    //////// End Normal Tower ////////
+    
+    //////// Freeze Tower ////////
+    if (mouseButton == LEFT) { 
+      if (canPlaceTurret) {
+        if (!tile.hasTurret) {
+          if (funds >= 150) {
+            funds -= 150;
+            freezeTurrets.add(f);
+            f.x = pos.x;
+            f.y = pos.y;
+            tile.hasTurret = true;
+          } else println("NOT ENOUGH MONEY");
+        } else { 
+          //println("A turret is already on this tile!!!");
+          for (int i = 0; i < freezeTurrets.size(); i++) {
+            if (!freezeTurrets.get(i).isSelected) {
+              if (freezeTurrets.get(i).isHover) { 
+                freezeTurrets.get(i).isSelected = true;
+                println("A turret is selected");
+              }
+            } else {
+              if (freezeTurrets.get(i).isHover) {
+                freezeTurrets.get(i).isSelected = false;
+              }
+            }
+          }
+        }
+      } else if (fireRateButton.rectOver) {
+        for (int i = 0; i < freezeTurrets.size(); i++) {
+          if (freezeTurrets.get(i).isSelected && !freezeTurrets.get(i).hasFireRateUpgrade) { 
+            if (funds >= fireRateUpgradeCost) {
+              funds -= fireRateUpgradeCost;
+              freezeTurrets.get(i).hasFireRateUpgrade = true;
+              freezeTurrets.get(i).fireRate = 0.5;
+              //freezeTurrets.get(i).isSelected = false;
+              cost = 0;
+            }
+          }
+        }
+      } else if (rangeButton.rectOver) {
+        for (int i = 0; i < freezeTurrets.size(); i++) {
+          if (freezeTurrets.get(i).isSelected && !freezeTurrets.get(i).hasRangeUpgrade) { 
+            if (funds >= rangeUpgradeCost) {
+              funds -= rangeUpgradeCost;
+              freezeTurrets.get(i).hasRangeUpgrade = true;
+              freezeTurrets.get(i).range = 1.0;
+              //freezeTurrets.get(i).isSelected = false;
+              cost = 0;
+            }
+          }
+        }
+      } else if (damageButton.rectOver) {
+        for (int i = 0; i < freezeTurrets.size(); i++) {
+          if (funds >= damageUpgradeCost) {
+            if (freezeTurrets.get(i).isSelected && !freezeTurrets.get(i).hasDamageUpgrade) { 
+              funds -= damageUpgradeCost;
+              freezeTurrets.get(i).hasDamageUpgrade = true;
+              freezeTurrets.get(i).damage = 5.0;
+              //freezeTurrets.get(i).isSelected = false;
+              cost = 0;
+            }
+          }
+        }
+      } 
+      // When nothing is selected
+      else {
+        for (int i = 0; i < freezeTurrets.size(); i++) {
+          if (!freezeTurrets.get(i).isHover) {
+            freezeTurrets.get(i).isSelected = false;
+            cost = 0;
+          }
+        }
+      }
+    } else if (mouseButton == RIGHT) {
+      if (tile.hasTurret) {
+
+        for (int i = 0; i < freezeTurrets.size(); i++) {
+          if (freezeTurrets.get(i).isHover) { 
+            funds += 50;
+            freezeTurrets.remove(i);
+          }
+        }
+
+        tile.hasTurret = false;
+      }
+    }
+    //////// End Freeze Tower ////////
   }
 }
 
@@ -448,5 +571,13 @@ boolean checkCollisionBulletEnemy(Bullet b, Enemy e) {
   float dy = e.pixlP.y - b.y;
   float dis = sqrt(dx * dx + dy * dy);
   if (dis <= b.radius + e.radius) return true;
+  return false;
+}
+// Frost Collision
+boolean checkCollisionFrostEnemy(Frost f, Enemy e) {
+  float dx = e.pixlP.x - f.x;
+  float dy = e.pixlP.y - f.y;
+  float dis = sqrt(dx * dx + dy * dy);
+  if (dis <= f.radius + e.radius) return true;
   return false;
 }
