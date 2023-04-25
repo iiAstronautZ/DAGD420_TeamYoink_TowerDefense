@@ -461,15 +461,30 @@ class ScenePlay
         }
       }
       doOnce = true;
+    } else if (turret1Button.rectOver && !doOnce) {
+      for (int i = 0; i < turrets.size(); i++) {
+        cost += tower1Cost;
+      }
+      doOnce = true;
+    } else if (turret2Button.rectOver && !doOnce) {
+      for (int i = 0; i < turrets.size(); i++) {
+        cost += tower2Cost;
+      }
+      doOnce = true;
+    } else if (turret3Button.rectOver && !doOnce) {
+      for (int i = 0; i < turrets.size(); i++) {
+        cost += tower3Cost;
+      }
+      doOnce = true;
+    } else if (turret4Button.rectOver && !doOnce) {
+      for (int i = 0; i < turrets.size(); i++) {
+        cost += tower4Cost;
+      }
+      doOnce = true;
     } else if (!fireRateButton.rectOver && !rangeButton.rectOver && !damageButton.rectOver) {
       doOnce = false;
       cost = 0;
     }
-  }
-  
-  // Brandon
-  void Frozen(){
-    
   }
 
   void mousePressed() 
