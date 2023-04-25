@@ -527,7 +527,7 @@ class ScenePlay
         }
       } else if (turret1Button.rectOver) {
         turretNumber = 1;
-        cost = tower1cost;
+        cost = tower1Cost;
       } else if (turret2Button.rectOver) {
         turretNumber = 2;
       } else if (turret3Button.rectOver) {
