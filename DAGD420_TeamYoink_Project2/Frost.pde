@@ -7,7 +7,7 @@ class Frost {
   PVector target = new PVector();
   boolean isDead = false;
 
-  float radius = 20;
+  float radius = 150;
 
   Frost(float xPos, float yPos, float range, float damage) {
     x = xPos;
@@ -32,8 +32,8 @@ class Frost {
     }
     
     if (dis > 5) {
-      x +=  speed * cos(angle) * dt; // x = x + dx * friction;
-      y +=  speed * sin(angle) * dt;
+      //x +=  speed * cos(angle) * dt; // x = x + dx * friction;
+      //y +=  speed * sin(angle) * dt;
     } else {
       isDead = true;
     } // If we reach the target
@@ -41,8 +41,8 @@ class Frost {
 
     pushMatrix();
     noStroke();
-    fill(0, 0, 255);
-    ellipse(x, y, 10, 10);
+    fill(0, 0, 255, 75);
+    ellipse(x, y, 200, 200);
     popMatrix();
   }
 }
