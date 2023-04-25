@@ -41,7 +41,7 @@ class Bullet {
 
     pushMatrix();
     noStroke();
-    fill(255, 255, 0);
+    fill(255, 255, 255);
     ellipse(x, y, 10, 10);
     popMatrix();
   }

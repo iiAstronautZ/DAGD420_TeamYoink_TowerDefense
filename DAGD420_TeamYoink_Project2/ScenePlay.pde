@@ -1,16 +1,23 @@
 // this class defines a "Play" scene
 
 ArrayList<Turret> turrets = new ArrayList<Turret>();
-ArrayList<FreezeTurret> freezeTurrets = new ArrayList<FreezeTurret>();
+ArrayList<TurretAOE> turretAOE = new ArrayList<TurretAOE>();
+ArrayList<TurretSlow> turretSlow = new ArrayList<TurretSlow>();
 ArrayList<Enemy> enemies = new ArrayList();
+
 ArrayList<Bullet> bullets = new ArrayList<Bullet>(); 
-ArrayList<Frost> frost = new ArrayList<Frost>(); 
+ArrayList<SlowBullet> slowbullets = new ArrayList<SlowBullet>(); 
+ArrayList<BombBullet> bombbullets = new ArrayList<BombBullet>(); 
 
+//Upgrade buttons
 Button damageButton = new Button(1025, 575, "Damage Upgrade", 24, 55, 110, 25);
-
 Button rangeButton = new Button(1025, 675, "Range Upgrade", 24, 55, 110, 25);
-
 Button fireRateButton = new Button(1025, 775, "Fire Rate Upgrade", 24, 55, 110, 25);
+
+//Turret Buttons
+Button turret1Button = new Button(1025, 575, "Normal Turret", 24, 55, 110, 25);
+Button turret2Button = new Button(1025, 675, "Bomb Turret", 24, 55, 110, 25);
+Button turret3Button = new Button(1025, 775, "Slowing Turret", 24, 55, 110, 25);
 
 boolean debug = false;
 boolean doOnce = false;
@@ -32,6 +39,13 @@ float rangeUpgradeCost, damageUpgradeCost, fireRateUpgradeCost;
 int wave = 1;
 
 int enemiesKilled = 0;
+
+//Khelben
+Boolean towerSelected = false;
+int turretNumber;
+int tower1Cost = 100;
+int tower2Cost = 200;
+int tower3Cost = 150;
 
 class ScenePlay 
 {
@@ -220,15 +234,19 @@ class ScenePlay
       Turret t = turrets.get(i);
       t.draw();
     }   
-    for (int i = 0; i < freezeTurrets.size(); i++) {
-      FreezeTurret f = freezeTurrets.get(i);
-      f.draw();
-    }   
+
+    for (int i = 0; i < turretAOE.size(); i++) {
+      TurretAOE a = turretAOE.get(i);
+      a.draw();
+    } 
+    for (int i = 0; i < turretSlow.size(); i++) {
+      TurretSlow s = turretSlow.get(i);
+      s.draw();
+    } 
 
     //enemy.draw();
 
     // ADDING ENEMIES TO ARRAY?
-    // Normal Bullet
     for (int i = 0; i < bullets.size(); i++) {
       Bullet b = bullets.get(i);
       if (b.isDead) bullets.remove(b);
@@ -236,13 +254,19 @@ class ScenePlay
       audioBullet.rewind();
       b.draw();
     }
-    // Frost Bullet
-    for (int i = 0; i < frost.size(); i++) {
-      Frost f = frost.get(i);
-      if (f.isDead) frost.remove(f);
+    for (int i = 0; i < slowbullets.size(); i++) {
+      SlowBullet sb = slowbullets.get(i);
+      if (sb.isDead) slowbullets.remove(sb);
       audioBullet.play();
       audioBullet.rewind();
-      f.draw();
+      sb.draw();
+    }
+    for (int i = 0; i < bombbullets.size(); i++) {
+      BombBullet bb = bombbullets.get(i);
+      if (bb.isDead) bombbullets.remove(bb);
+      audioBullet.play();
+      audioBullet.rewind();
+      bb.draw();
     }
 
     for (int i = 0; i < enemies.size(); i++)
@@ -267,13 +291,29 @@ class ScenePlay
           }
         }
       }
-        for (int f = 0; f < frost.size(); f++) { // Frost collision with Enemy
-        if (checkCollisionFrostEnemy(frost.get(f), e)) {
+      for (int sb = 0; sb < slowbullets.size(); sb++) { // Bullet collision with Enemy
+        if (checkCollisionBulletEnemy(slowbullets.get(sb), e)) {
 
-          //e.health -= frost.get(f).damage;
-          //enemy.gridT = enemy.gridP;
+          e.health -= slowbullets.get(sb).damage;
+          e.snapThreshold = 0.1;
+          slowbullets.remove(sb);
 
-          frost.remove(f);
+          if (e.health <= 0) { 
+            enemies.remove(e);
+            enemiesKilled += 1;
+            println("ENEMIES DED");
+            funds += 25;
+            audioAlienDeath.play();
+            audioAlienDeath.rewind();
+          }
+        }
+      }
+      for (int bb = 0; bb < bombbullets.size(); bb++) { // Bullet collision with Enemy
+        if (checkCollisionBulletEnemy(bombbullets.get(bb), e)) {
+
+          e.health -= bombbullets.get(bb).damage;
+
+          bombbullets.remove(bb);
 
           if (e.health <= 0) { 
             enemies.remove(e);
@@ -323,16 +363,31 @@ class ScenePlay
 
     text("Cost: $" + cost + "0", 1075, 525);
 
-
-    image(logo, 950, 50);
+     image(logo, 950, 50);
+    //Khelben
+    if(towerSelected){
+      image(damageIcon, 925, 565);
+      damageButton.draw();
+      image(rangeIcon, 925, 665);
+      rangeButton.draw();
+      image(fireRateIcon, 925, 765);
+      fireRateButton.draw();
+    } else{
+    }
+    //Khelben
+    if(!towerSelected){
+    fill(#7F7F7F);
+    rect(900, 550, 400, 300);
     image(damageIcon, 925, 565);
+    turret1Button.draw();
     image(rangeIcon, 925, 665);
+    turret2Button.draw();
     image(fireRateIcon, 925, 765);
+    turret3Button.draw();
+    //image(fireRateIcon, 925, 765);
+    //turret3Button.draw();
+    }
 
-    damageButton.draw();
-    rangeButton.draw();
-    fireRateButton.draw();
-    
     if (damageButton.rectOver && !doOnce) {
       for (int i = 0; i < turrets.size(); i++) {
         if (turrets.get(i).isSelected && !turrets.get(i).hasDamageUpgrade) {
@@ -379,30 +434,57 @@ class ScenePlay
     PVector pos = tile.getCenter();
 
     Turret t = new Turret();
-    FreezeTurret f = new FreezeTurret();
-    
-    //////// Normal Tower ////////
-    if (mouseButton == CENTER) { 
+    TurretAOE a = new TurretAOE();
+    TurretSlow s = new TurretSlow();
+
+    if (mouseButton == LEFT) { 
+        towerSelected = false;
       if (canPlaceTurret) {
-        if (!tile.hasTurret) {
-          if (funds >= 150) {
-            funds -= 150;
+        if (!tile.hasTurret && turretNumber == 1) {
+          if (funds >= tower1Cost) {
+            funds -= tower1Cost;
             turrets.add(t);
             t.x = pos.x;
             t.y = pos.y;
             tile.hasTurret = true;
+            turretNumber = 0;
+          } else println("NOT ENOUGH MONEY");
+        } else if (!tile.hasTurret && turretNumber == 2) {
+          if (funds >= tower2Cost) {
+            funds -= tower2Cost;
+            turretAOE.add(a);
+            a.x = pos.x;
+            a.y = pos.y;
+            tile.hasTurret = true;
+            turretNumber = 0;
+          } else println("NOT ENOUGH MONEY");
+        }  else if (!tile.hasTurret && turretNumber == 3) {
+          if (funds >= tower3Cost) {
+            funds -= tower3Cost;
+            turretSlow.add(s);
+            s.x = pos.x;
+            s.y = pos.y;
+            tile.hasTurret = true;
+            turretNumber = 0;
           } else println("NOT ENOUGH MONEY");
         } else { 
           //println("A turret is already on this tile!!!");
           for (int i = 0; i < turrets.size(); i++) {
+            //Khelben
+            turrets.get(i).isSelected = false;
+            //towerSelected = false;
             if (!turrets.get(i).isSelected) {
               if (turrets.get(i).isHover) { 
                 turrets.get(i).isSelected = true;
+                //Khelben
+                towerSelected = true;
                 println("A turret is selected");
               }
             } else {
               if (turrets.get(i).isHover) {
                 turrets.get(i).isSelected = false;
+                //Khelben
+                towerSelected = false;
               }
             }
           }
@@ -443,7 +525,14 @@ class ScenePlay
             }
           }
         }
-      } 
+      } else if (turret1Button.rectOver) {
+        turretNumber = 1;
+        cost = tower1Cost;
+      } else if (turret2Button.rectOver) {
+        turretNumber = 2;
+      } else if (turret3Button.rectOver) {
+        turretNumber = 3;
+      }
       // When nothing is selected
       else {
         for (int i = 0; i < turrets.size(); i++) {
@@ -458,102 +547,25 @@ class ScenePlay
 
         for (int i = 0; i < turrets.size(); i++) {
           if (turrets.get(i).isHover) { 
-            funds += 50;
+            funds += 25;
             turrets.remove(i);
           }
         }
-
+        for (int i = 0; i < turretAOE.size(); i++) {
+          if (turretAOE.get(i).isHover) { 
+            funds += 100;
+            turretAOE.remove(i);
+          }
+        }
+        for (int i = 0; i < turretSlow.size(); i++) {
+          if (turretSlow.get(i).isHover) { 
+            funds += 75;
+            turretSlow.remove(i);
+          }
+        }
         tile.hasTurret = false;
       }
     }
-    //////// End Normal Tower ////////
-    
-    //////// Freeze Tower ////////
-    if (mouseButton == LEFT) { 
-      if (canPlaceTurret) {
-        if (!tile.hasTurret) {
-          if (funds >= 150) {
-            funds -= 150;
-            freezeTurrets.add(f);
-            f.x = pos.x;
-            f.y = pos.y;
-            tile.hasTurret = true;
-          } else println("NOT ENOUGH MONEY");
-        } else { 
-          //println("A turret is already on this tile!!!");
-          for (int i = 0; i < freezeTurrets.size(); i++) {
-            if (!freezeTurrets.get(i).isSelected) {
-              if (freezeTurrets.get(i).isHover) { 
-                freezeTurrets.get(i).isSelected = true;
-                println("A turret is selected");
-              }
-            } else {
-              if (freezeTurrets.get(i).isHover) {
-                freezeTurrets.get(i).isSelected = false;
-              }
-            }
-          }
-        }
-      } else if (fireRateButton.rectOver) {
-        for (int i = 0; i < freezeTurrets.size(); i++) {
-          if (freezeTurrets.get(i).isSelected && !freezeTurrets.get(i).hasFireRateUpgrade) { 
-            if (funds >= fireRateUpgradeCost) {
-              funds -= fireRateUpgradeCost;
-              freezeTurrets.get(i).hasFireRateUpgrade = true;
-              freezeTurrets.get(i).fireRate = 0.5;
-              //freezeTurrets.get(i).isSelected = false;
-              cost = 0;
-            }
-          }
-        }
-      } else if (rangeButton.rectOver) {
-        for (int i = 0; i < freezeTurrets.size(); i++) {
-          if (freezeTurrets.get(i).isSelected && !freezeTurrets.get(i).hasRangeUpgrade) { 
-            if (funds >= rangeUpgradeCost) {
-              funds -= rangeUpgradeCost;
-              freezeTurrets.get(i).hasRangeUpgrade = true;
-              freezeTurrets.get(i).range = 1.0;
-              //freezeTurrets.get(i).isSelected = false;
-              cost = 0;
-            }
-          }
-        }
-      } else if (damageButton.rectOver) {
-        for (int i = 0; i < freezeTurrets.size(); i++) {
-          if (funds >= damageUpgradeCost) {
-            if (freezeTurrets.get(i).isSelected && !freezeTurrets.get(i).hasDamageUpgrade) { 
-              funds -= damageUpgradeCost;
-              freezeTurrets.get(i).hasDamageUpgrade = true;
-              freezeTurrets.get(i).damage = 5.0;
-              //freezeTurrets.get(i).isSelected = false;
-              cost = 0;
-            }
-          }
-        }
-      } 
-      // When nothing is selected
-      else {
-        for (int i = 0; i < freezeTurrets.size(); i++) {
-          if (!freezeTurrets.get(i).isHover) {
-            freezeTurrets.get(i).isSelected = false;
-            cost = 0;
-          }
-        }
-      }
-    } else if (mouseButton == RIGHT) {
-      if (tile.hasTurret) {
-
-        for (int i = 0; i < freezeTurrets.size(); i++) {
-          if (freezeTurrets.get(i).isHover) { 
-            funds += 50;
-            freezeTurrets.remove(i);
-          }
-        }
-
-        tile.hasTurret = false;
-      }
-    }
-    //////// End Freeze Tower ////////
   }
 }
 
@@ -573,11 +585,17 @@ boolean checkCollisionBulletEnemy(Bullet b, Enemy e) {
   if (dis <= b.radius + e.radius) return true;
   return false;
 }
-// Frost Collision
-boolean checkCollisionFrostEnemy(Frost f, Enemy e) {
-  float dx = e.pixlP.x - f.x;
-  float dy = e.pixlP.y - f.y;
+boolean checkCollisionBulletEnemy(BombBullet bb, Enemy e) {
+  float dx = e.pixlP.x - bb.x;
+  float dy = e.pixlP.y - bb.y;
   float dis = sqrt(dx * dx + dy * dy);
-  if (dis <= f.radius + e.radius) return true;
+  if (dis <= bb.radius + e.radius) return true;
+  return false;
+}
+boolean checkCollisionBulletEnemy(SlowBullet sb, Enemy e) {
+  float dx = e.pixlP.x - sb.x;
+  float dy = e.pixlP.y - sb.y;
+  float dis = sqrt(dx * dx + dy * dy);
+  if (dis <= sb.radius + e.radius) return true;
   return false;
 }
