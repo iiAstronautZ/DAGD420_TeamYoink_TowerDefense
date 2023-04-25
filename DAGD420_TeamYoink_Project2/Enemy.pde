@@ -14,7 +14,8 @@ class Enemy extends RadialObject
   boolean reachedTarget;
 
   int health;
-
+  float snapThreshold = 1;
+  
   PImage alien;
 
   float angle;
@@ -45,6 +46,7 @@ class Enemy extends RadialObject
     audioAlienSpawn.rewind();
 
     this.health = health;
+    this.snapThreshold = snapThreshold;
 
     teleportTo(gridP);
   }
@@ -96,7 +98,6 @@ class Enemy extends RadialObject
   void updateMove() 
   {
 
-    float snapThreshold = 1;
     PVector pixlT = level.getTileCenterAt(gridP);
     PVector diff = PVector.sub(pixlT, pixlP);
 

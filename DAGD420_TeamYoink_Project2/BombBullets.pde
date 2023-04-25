@@ -1,4 +1,4 @@
-class Bullet {
+class BombBullet {
   float x, y;
   float speed = 1000;
   float damage = 1;
@@ -9,7 +9,7 @@ class Bullet {
 
   float radius = 20;
 
-  Bullet(float xPos, float yPos, float range, float damage) {
+  BombBullet(float xPos, float yPos, float range, float damage) {
     x = xPos;
     y = yPos;
     this.range = range;
@@ -41,7 +41,7 @@ class Bullet {
 
     pushMatrix();
     noStroke();
-    fill(255, 255, 255);
+    fill(155, 155, 155);
     ellipse(x, y, 10, 10);
     popMatrix();
   }

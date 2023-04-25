@@ -4,7 +4,10 @@ ArrayList<Turret> turrets = new ArrayList<Turret>();
 ArrayList<TurretAOE> turretAOE = new ArrayList<TurretAOE>();
 ArrayList<TurretSlow> turretSlow = new ArrayList<TurretSlow>();
 ArrayList<Enemy> enemies = new ArrayList();
+
 ArrayList<Bullet> bullets = new ArrayList<Bullet>(); 
+ArrayList<SlowBullet> slowbullets = new ArrayList<SlowBullet>(); 
+ArrayList<BombBullet> bombbullets = new ArrayList<BombBullet>(); 
 
 //Upgrade buttons
 Button damageButton = new Button(1025, 575, "Damage Upgrade", 24, 55, 110, 25);
@@ -12,9 +15,9 @@ Button rangeButton = new Button(1025, 675, "Range Upgrade", 24, 55, 110, 25);
 Button fireRateButton = new Button(1025, 775, "Fire Rate Upgrade", 24, 55, 110, 25);
 
 //Turret Buttons
-Button turret1Button = new Button(1025, 575, "Turret 1", 24, 55, 110, 25);
-Button turret2Button = new Button(1025, 675, "Turret 2", 24, 55, 110, 25);
-Button turret3Button = new Button(1025, 775, "Turret 3", 24, 55, 110, 25);
+Button turret1Button = new Button(1025, 575, "Normal Turret", 24, 55, 110, 25);
+Button turret2Button = new Button(1025, 675, "Bomb Turret", 24, 55, 110, 25);
+Button turret3Button = new Button(1025, 775, "Slowing Turret", 24, 55, 110, 25);
 
 boolean debug = false;
 boolean doOnce = false;
@@ -251,6 +254,20 @@ class ScenePlay
       audioBullet.rewind();
       b.draw();
     }
+    for (int i = 0; i < slowbullets.size(); i++) {
+      SlowBullet sb = slowbullets.get(i);
+      if (sb.isDead) slowbullets.remove(sb);
+      audioBullet.play();
+      audioBullet.rewind();
+      sb.draw();
+    }
+    for (int i = 0; i < bombbullets.size(); i++) {
+      BombBullet bb = bombbullets.get(i);
+      if (bb.isDead) bombbullets.remove(bb);
+      audioBullet.play();
+      audioBullet.rewind();
+      bb.draw();
+    }
 
     for (int i = 0; i < enemies.size(); i++)
     {
@@ -263,6 +280,40 @@ class ScenePlay
           e.health -= bullets.get(j).damage;
 
           bullets.remove(j);
+
+          if (e.health <= 0) { 
+            enemies.remove(e);
+            enemiesKilled += 1;
+            println("ENEMIES DED");
+            funds += 25;
+            audioAlienDeath.play();
+            audioAlienDeath.rewind();
+          }
+        }
+      }
+      for (int sb = 0; sb < slowbullets.size(); sb++) { // Bullet collision with Enemy
+        if (checkCollisionBulletEnemy(slowbullets.get(sb), e)) {
+
+          e.health -= slowbullets.get(sb).damage;
+          e.snapThreshold = 0.1;
+          slowbullets.remove(sb);
+
+          if (e.health <= 0) { 
+            enemies.remove(e);
+            enemiesKilled += 1;
+            println("ENEMIES DED");
+            funds += 25;
+            audioAlienDeath.play();
+            audioAlienDeath.rewind();
+          }
+        }
+      }
+      for (int bb = 0; bb < bombbullets.size(); bb++) { // Bullet collision with Enemy
+        if (checkCollisionBulletEnemy(bombbullets.get(bb), e)) {
+
+          e.health -= bombbullets.get(bb).damage;
+
+          bombbullets.remove(bb);
 
           if (e.health <= 0) { 
             enemies.remove(e);
@@ -333,6 +384,8 @@ class ScenePlay
     turret2Button.draw();
     image(fireRateIcon, 925, 765);
     turret3Button.draw();
+    //image(fireRateIcon, 925, 765);
+    //turret3Button.draw();
     }
 
     if (damageButton.rectOver && !doOnce) {
@@ -400,8 +453,8 @@ class ScenePlay
           if (funds >= tower2Cost) {
             funds -= tower2Cost;
             turretAOE.add(a);
-            t.x = pos.x;
-            t.y = pos.y;
+            a.x = pos.x;
+            a.y = pos.y;
             tile.hasTurret = true;
             turretNumber = 0;
           } else println("NOT ENOUGH MONEY");
@@ -409,8 +462,8 @@ class ScenePlay
           if (funds >= tower3Cost) {
             funds -= tower3Cost;
             turretSlow.add(s);
-            t.x = pos.x;
-            t.y = pos.y;
+            s.x = pos.x;
+            s.y = pos.y;
             tile.hasTurret = true;
             turretNumber = 0;
           } else println("NOT ENOUGH MONEY");
@@ -474,6 +527,7 @@ class ScenePlay
         }
       } else if (turret1Button.rectOver) {
         turretNumber = 1;
+        cost = tower1cost;
       } else if (turret2Button.rectOver) {
         turretNumber = 2;
       } else if (turret3Button.rectOver) {
@@ -493,11 +547,22 @@ class ScenePlay
 
         for (int i = 0; i < turrets.size(); i++) {
           if (turrets.get(i).isHover) { 
-            funds += 50;
+            funds += 25;
             turrets.remove(i);
           }
         }
-
+        for (int i = 0; i < turretAOE.size(); i++) {
+          if (turretAOE.get(i).isHover) { 
+            funds += 100;
+            turretAOE.remove(i);
+          }
+        }
+        for (int i = 0; i < turretSlow.size(); i++) {
+          if (turretSlow.get(i).isHover) { 
+            funds += 75;
+            turretSlow.remove(i);
+          }
+        }
         tile.hasTurret = false;
       }
     }
@@ -518,5 +583,19 @@ boolean checkCollisionBulletEnemy(Bullet b, Enemy e) {
   float dy = e.pixlP.y - b.y;
   float dis = sqrt(dx * dx + dy * dy);
   if (dis <= b.radius + e.radius) return true;
+  return false;
+}
+boolean checkCollisionBulletEnemy(BombBullet bb, Enemy e) {
+  float dx = e.pixlP.x - bb.x;
+  float dy = e.pixlP.y - bb.y;
+  float dis = sqrt(dx * dx + dy * dy);
+  if (dis <= bb.radius + e.radius) return true;
+  return false;
+}
+boolean checkCollisionBulletEnemy(SlowBullet sb, Enemy e) {
+  float dx = e.pixlP.x - sb.x;
+  float dy = e.pixlP.y - sb.y;
+  float dis = sqrt(dx * dx + dy * dy);
+  if (dis <= sb.radius + e.radius) return true;
   return false;
 }
