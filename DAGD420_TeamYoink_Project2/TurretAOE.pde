@@ -77,6 +77,7 @@ class TurretAOE {
     if (fireRateCD <= 0) {
 
       BombBullet b = new BombBullet(x, y, range, damage);
+      bombbullets.add(b);
 
       for (int i = 0; i < enemies.size(); i++)
       {
@@ -88,8 +89,7 @@ class TurretAOE {
 
         if (dis < 350) {
           b.target = new PVector(e.pixlP.x, e.pixlP.y);
-          angle = atan2(dy, dx);
-          bombbullets.add(b);
+          angle = atan2(dy, dx);        
         }
       }
 

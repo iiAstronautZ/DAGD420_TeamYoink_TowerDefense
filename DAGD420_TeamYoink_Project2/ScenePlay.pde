@@ -8,7 +8,8 @@ ArrayList<Enemy> enemies = new ArrayList();
 ArrayList<Frost> frost = new ArrayList<Frost>(); 
 ArrayList<Bullet> bullets = new ArrayList<Bullet>(); 
 ArrayList<SlowBullet> slowbullets = new ArrayList<SlowBullet>(); 
-ArrayList<BombBullet> bombbullets = new ArrayList<BombBullet>(); 
+ArrayList<BombBullet> bombbullets = new ArrayList<BombBullet>();
+ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
 //Upgrade buttons
 Button damageButton = new Button(1025, 575, "Damage Upgrade", 24, 55, 110, 25);
@@ -281,10 +282,25 @@ class ScenePlay
     // Bomb Bullets
     for (int i = 0; i < bombbullets.size(); i++) {
       BombBullet bb = bombbullets.get(i);
-      if (bb.isDead) bombbullets.remove(bb);
       audioBullet.play();
       audioBullet.rewind();
       bb.draw();
+      if (bb.isDead) {
+        Bomb b = new Bomb(bb.x, bb.y);
+        bombs.add(b);
+        bombbullets.remove(bb);     
+      }
+    }
+    
+    // Bomb
+    for (int i = 0; i < bombs.size(); i++) {
+      Bomb b = bombs.get(i);
+      audioBullet.play();
+      audioBullet.rewind();
+      b.draw();
+      if (b.isDead) {
+        bombs.remove(b);     
+      }
     }
     // Frost Bullet
     for (int i = 0; i < frost.size(); i++) {
@@ -339,7 +355,7 @@ class ScenePlay
 
           e.health -= bombbullets.get(bb).damage;
 
-          bombbullets.remove(bb);
+          bombbullets.get(bb).isDead = true;
 
           if (e.health <= 0) { 
             enemies.remove(e);

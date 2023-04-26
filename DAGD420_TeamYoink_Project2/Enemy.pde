@@ -21,6 +21,8 @@ class Enemy extends RadialObject
   float angle;
 
   float PixlTx, PixlTy;
+  
+  boolean tagged = false;
 
   Enemy(int health) 
   {
