@@ -1,4 +1,4 @@
-class Bullet {
+class Frost {
   float x, y;
   float speed = 1000;
   float damage = 1;
@@ -7,9 +7,9 @@ class Bullet {
   PVector target = new PVector();
   boolean isDead = false;
 
-  float radius = 20;
+  float radius = 150;
 
-  Bullet(float xPos, float yPos, float range, float damage) {
+  Frost(float xPos, float yPos, float range, float damage) {
     x = xPos;
     y = yPos;
     this.range = range;
@@ -32,8 +32,8 @@ class Bullet {
     }
     
     if (dis > 5) {
-      x +=  speed * cos(angle) * dt; // x = x + dx * friction;
-      y +=  speed * sin(angle) * dt;
+      //x +=  speed * cos(angle) * dt; // x = x + dx * friction;
+      //y +=  speed * sin(angle) * dt;
     } else {
       isDead = true;
     } // If we reach the target
@@ -41,8 +41,8 @@ class Bullet {
 
     pushMatrix();
     noStroke();
-    fill(255, 255, 255);
-    ellipse(x, y, 10, 10);
+    fill(0, 0, 255, 75);
+    ellipse(x, y, 200, 200);
     popMatrix();
   }
 }
