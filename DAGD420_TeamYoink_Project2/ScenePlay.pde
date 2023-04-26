@@ -107,6 +107,7 @@ class ScenePlay
 
   void draw() 
   {
+    
     // UPDATE:
 
     if (baseHealth <= 0) switchToGameOver();
