@@ -321,7 +321,7 @@ class ScenePlay
         if (checkCollisionBulletEnemy(slowbullets.get(sb), e)) {
 
           //e.health -= slowbullets.get(sb).damage;
-          e.snapThreshold = 0.1;
+          e.snapThreshold = e.snapThreshold/3;
           slowbullets.remove(sb);
 
           if (e.health <= 0) { 
