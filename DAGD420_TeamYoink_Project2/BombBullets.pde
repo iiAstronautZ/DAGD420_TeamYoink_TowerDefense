@@ -65,6 +65,7 @@ class Bomb {
         enemies.get(i).health -= damage;
         if(enemies.get(i).health <= 0){
         enemies.remove(i);
+        funds += 25;
         }
       }
     }
