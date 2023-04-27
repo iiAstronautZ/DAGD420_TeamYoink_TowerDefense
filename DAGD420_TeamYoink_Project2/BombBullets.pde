@@ -63,6 +63,9 @@ class Bomb {
     for (int i = 0; i < enemies.size(); i++) {
       if(checkCollisionBombEnemy(this, enemies.get(i))) {
         enemies.get(i).health -= damage;
+        if(enemies.get(i).health <= 0){
+        enemies.remove(i);
+        }
       }
     }
   }

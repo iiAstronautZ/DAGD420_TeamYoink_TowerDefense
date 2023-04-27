@@ -23,6 +23,15 @@ class SceneGameOver {
     for (int i = 0; i < turrets.size(); i++) {
       turrets.remove(i);
     }
+        for (int s = 0; s < turretSlow.size(); s++) {
+      turretSlow.remove(s);
+    }
+        for (int a = 0; a < turretAOE.size(); a++) {
+      turretAOE.remove(a);
+    }
+        for (int f = 0; f < freezeTurret.size(); f++) {
+      freezeTurret.remove(f);
+    }
     
     returnButton.draw();
   }
