@@ -1,4 +1,4 @@
-class Turret {
+class TurretAOE {
 
   float x, y;
 
@@ -21,7 +21,7 @@ class Turret {
   PImage soldier;
   PImage soldierTint;
 
-  Turret() {
+  TurretAOE() {
     fireRateCD = fireRate;
 
     soldier = loadImage("soldier.png");
@@ -76,7 +76,8 @@ class Turret {
 
     if (fireRateCD <= 0) {
 
-      Bullet b = new Bullet(x, y, range, damage);
+      BombBullet b = new BombBullet(x, y, range, damage);
+      bombbullets.add(b);
 
       for (int i = 0; i < enemies.size(); i++)
       {
@@ -88,8 +89,7 @@ class Turret {
 
         if (dis < 350) {
           b.target = new PVector(e.pixlP.x, e.pixlP.y);
-          angle = atan2(dy, dx);
-          bullets.add(b);
+          angle = atan2(dy, dx);        
         }
       }
 

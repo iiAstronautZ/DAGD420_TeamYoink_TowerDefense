@@ -1,7 +1,7 @@
 class Player {
 
   // GRID-SPACE COORDINATES:
-  Point gridP = new Point(); // current position
+  Point gridP = new Point(0,2); // current position
   Point gridT = new Point(); // target position (pathfinding goal)
 
   // PIXEL-SPACE COORDINATES:
@@ -60,8 +60,8 @@ class Player {
   }
   void draw() {
     noStroke();
-    fill(0);
-    ellipse(pixlP.x, pixlP.y, 28, 28);
+    //fill(0);
+    //ellipse(pixlP.x, pixlP.y, 28, 28);
     drawPath();
   }
   void drawPath() {
