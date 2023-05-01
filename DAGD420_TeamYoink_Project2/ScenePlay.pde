@@ -17,10 +17,10 @@ Button rangeButton = new Button(1025, 675, "Range Upgrade", 24, 55, 110, 25);
 Button fireRateButton = new Button(1025, 775, "Fire Rate Upgrade", 24, 55, 110, 25);
 
 //Turret Buttons
-Button turret1Button = new Button(1025, 550, "Normal Turret", 24, 55, 110, 25);
-Button turret2Button = new Button(1025, 600, "Bomb Turret", 24, 55, 110, 25);
-Button turret3Button = new Button(1025, 650, "Slowing Turret", 24, 55, 110, 25);
-Button turret4Button = new Button(1025, 700, "Freeze Turret", 24, 55, 110, 25);
+Button turret1Button = new Button(965, 575, "Normal Turret", 24, 55, 110, 25);
+Button turret2Button = new Button(965, 650, "Bomb Turret", 24, 55, 110, 25);
+Button turret3Button = new Button(965, 725, "Slowing Turret", 24, 55, 110, 25);
+Button turret4Button = new Button(965, 800, "Freeze Turret", 24, 55, 110, 25);
 
 boolean debug = false;
 boolean doOnce = false;
@@ -446,11 +446,11 @@ class ScenePlay
     if(!towerSelected){
     fill(#7F7F7F);
     rect(900, 550, 400, 300);
-    image(damageIcon, 925, 565);
+    //image(damageIcon, 925, 565);
     turret1Button.draw();
-    image(rangeIcon, 925, 665);
+    //image(rangeIcon, 925, 665);
     turret2Button.draw();
-    image(fireRateIcon, 925, 765);
+    //image(fireRateIcon, 925, 765);
     turret3Button.draw();
     turret4Button.draw();
     //image(fireRateIcon, 925, 765);
@@ -480,25 +480,36 @@ class ScenePlay
       doOnce = true;
     } else if (turret1Button.rectOver && !doOnce) {
       for (int i = 0; i < turrets.size(); i++) {
-        cost += tower1Cost;
-      }
+        if (!turrets.get(i).isSelected) {
+          cost += tower1Cost;
+        }
       doOnce = true;
+      }
     } else if (turret2Button.rectOver && !doOnce) {
       for (int i = 0; i < turrets.size(); i++) {
-        cost += tower2Cost;
+        if (!turrets.get(i).isSelected) {
+          cost += tower2Cost;
+        }
       }
       doOnce = true;
     } else if (turret3Button.rectOver && !doOnce) {
       for (int i = 0; i < turrets.size(); i++) {
-        cost += tower3Cost;
+        if (!turrets.get(i).isSelected) {
+          cost += tower3Cost;
+        }
       }
       doOnce = true;
     } else if (turret4Button.rectOver && !doOnce) {
       for (int i = 0; i < turrets.size(); i++) {
-        cost += tower4Cost;
+        if (!turrets.get(i).isSelected) {
+          cost += tower4Cost;
+        }
       }
       doOnce = true;
     } else if (!fireRateButton.rectOver && !rangeButton.rectOver && !damageButton.rectOver) {
+      doOnce = false;
+      cost = 0;
+    } else if (!turret1Button.rectOver && !turret2Button.rectOver && !turret3Button.rectOver && !turret4Button.rectOver) {
       doOnce = false;
       cost = 0;
     }
